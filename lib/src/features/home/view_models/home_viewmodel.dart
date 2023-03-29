@@ -10,10 +10,15 @@ class HomeViewmodel implements HomeViewmodelInterface {
     var url = '';
 
     if (author == null) {
-      url = '$baseUrl/select?indent=true&q.op=OR&q=*%3A*&rows=300&useParams=';
+      String anoInicio = '2015';
+      String anoFim = '2019';
+      url = '$baseUrl/select?indent=true&q.op=OR&q=*%3A*&rows=300&useParams=&fq=year%3A[$anoInicio%20TO%20$anoFim]';
     } else {
+      List<String> authorParts = author.split(' ');
+      String authorQuery =
+          authorParts.map((part) => 'author:*$part*').join(' AND ');
       url =
-          '$baseUrl/select?indent=true&q.op=OR&q=author%3A*$author*&rows=300&useParams=';
+          '$baseUrl/select?indent=true&q.op=AND&q=$authorQuery&rows=300&useParams=';
     }
 
     // await Future.delayed(Duration(seconds: 3));

@@ -1,4 +1,5 @@
 import 'package:buscador/src/features/home/model/arquivo_model.dart';
+import 'package:buscador/src/features/home/model/filter_model.dart';
 import 'package:buscador/src/features/home/view_models/home_viewmodel.dart';
 import 'package:buscador/src/features/home/view_models/interface/home_viewmodel_interface.dart';
 import 'package:flutter/material.dart';
@@ -6,12 +7,26 @@ import 'package:flutter/material.dart';
 class HomeController with ChangeNotifier {
   HomeViewmodelInterface viewmodel = HomeViewmodel();
 
-  String? _authorFilter;
+  FilterModel _filter = FilterModel(
+    filter: FilterType.title,
+    args: '',
+    initialDate: 0,
+    finalDate: 2023,
+  );
+
+  FilterType get filterType => _filter.filter;
+
+  set filterType(FilterType value) {
+    _filter = _filter.copyWith(filter: value);
+    notifyListeners();
+  }
+
+  // String? _authorFilter;
   set authorFilter(String value) {
     if (value == '') {
-      _authorFilter = null;
+      _filter = _filter.copyWith(args: null);
     } else {
-      _authorFilter = value;
+      _filter = _filter.copyWith(args: value);
     }
     notifyListeners();
   }
@@ -38,7 +53,7 @@ class HomeController with ChangeNotifier {
   }
 
   Future<void> loadArquivos() async {
-    final res = await viewmodel.loadArquivos(author: _authorFilter);
+    final res = await viewmodel.loadArquivos(author: _filter.args);
 
     if (res != null) {
       _arquivos = res;
