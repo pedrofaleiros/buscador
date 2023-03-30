@@ -1,11 +1,89 @@
 import 'package:buscador/src/features/home/model/arquivo_model.dart';
+import 'package:buscador/src/features/home/model/filter_model.dart';
 import 'package:buscador/src/features/home/view_models/interface/home_viewmodel_interface.dart';
 import 'package:dio/dio.dart';
 
 class HomeViewmodel implements HomeViewmodelInterface {
-  final baseUrl = 'http://localhost:8983/solr/teste-arquivos';
+  // final baseUrl = 'http://localhost:8983/solr/teste-arquivos';
+  final baseUrl = 'http://172.30.129.176:3333/';
 
   @override
+  Future<List<ArquivoModel>?> loadArquivos(
+      {required FilterModel filters}) async {
+    var query = '';
+
+    if (filters.args == '' || filters.args.isEmpty) {
+      // String anoInicio = '2015';
+      // String anoFim = '2019';
+      // &fq=year%3A[$anoInicio%20TO%20$anoFim]
+      query =
+          'select?indent=true&q.op=OR&q=*%3A*&rows=100&useParams=&sort=year+desc';
+    } else {
+      var type = '';
+
+      if (filters.type == FilterType.author) {
+        type = 'author';
+      } else {
+        type = 'title';
+      }
+
+      List<String> authorParts = filters.args.split(' ');
+      String authorQuery =
+          authorParts.map((part) => '$type:*$part*').join(' AND ');
+      query =
+          'select?indent=true&q.op=AND&q=$authorQuery&rows=100&useParams=&sort=year+desc';
+    }
+
+    final dio = Dio();
+
+    dio.options.sendTimeout = const Duration(seconds: 5);
+    dio.options.receiveTimeout = const Duration(seconds: 5);
+    dio.options.connectTimeout = const Duration(seconds: 5);
+
+    try {
+      final response =
+          await dio.get(baseUrl, queryParameters: {'solr_query': query});
+
+      final lista = response.data['response']['docs'] as List<dynamic>;
+
+      List<ArquivoModel> arqs =
+          lista.map((e) => ArquivoModel.fromMapSolr(e)).toList();
+
+      return arqs;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  @override
+  Future<List<ArquivoModel>?> fetchArquivos() async {
+    var query =
+        'select?indent=true&q.op=OR&q=*%3A*&rows=100&useParams=&sort=year+desc';
+
+    final dio = Dio();
+
+    dio.options.sendTimeout = const Duration(seconds: 5);
+    dio.options.receiveTimeout = const Duration(seconds: 5);
+    dio.options.connectTimeout = const Duration(seconds: 5);
+
+    try {
+      final response =
+          await dio.get(baseUrl, queryParameters: {'solr_query': query});
+
+      final lista = response.data['response']['docs'] as List<dynamic>;
+
+      List<ArquivoModel> arqs =
+          lista.map((e) => ArquivoModel.fromMapSolr(e)).toList();
+
+      return arqs;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  /* @override
   Future<List<ArquivoModel>?> loadArquivos({required String? author}) async {
     var url = '';
 
@@ -41,7 +119,7 @@ class HomeViewmodel implements HomeViewmodelInterface {
       print(e.toString());
       return null;
     }
-  }
+  } */
 
   @override
   List<ArquivoModel> getArquivos() {

@@ -1,16 +1,9 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:buscador/src/features/home/controller/home_controller.dart';
-import 'package:buscador/src/features/home/model/arquivo_model.dart';
-import 'package:buscador/src/features/home/model/filter_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
-import 'package:dio/dio.dart';
 
 import '../components/arquivos_listview.dart';
-import '../components/search_text_field.dart';
+import '../components/search_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,40 +15,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Widget get _loadingIndicator =>
+      const Center(child: CircularProgressIndicator());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home Page'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          final res =
-              Provider.of<HomeController>(context, listen: false).filterType;
-
-          if (res == FilterType.author) {
-            print('author');
-          } else {
-            print('title');
-          }
-        },
-        child: Icon(Icons.add),
+        title: const Text('Busque por arquivos'),
       ),
       body: FutureBuilder(
         future:
-            Provider.of<HomeController>(context, listen: false).loadArquivos(),
-        builder: (_, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          return Column(
-            children: const [
-              SearchTextField(),
-              ArquivosListView(),
-            ],
-          );
-        },
+            Provider.of<HomeController>(context, listen: false).fetchArquivos(),
+        builder: (_, snapshot) =>
+            snapshot.connectionState == ConnectionState.waiting
+                ? _loadingIndicator
+                : Column(
+                    children: const [
+                      SearchWidget(),
+                      ArquivosListView(),
+                    ],
+                  ),
       ),
     );
   }

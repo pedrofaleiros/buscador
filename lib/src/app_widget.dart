@@ -47,7 +47,7 @@ class AppWidget extends StatelessWidget {
         ),
         initialRoute: HomePage.routeName,
         routes: {
-          HomePage.routeName: (_) => HomePage(),
+          HomePage.routeName: (_) => const HomePage(),
         },
       ),
     );
