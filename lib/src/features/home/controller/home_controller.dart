@@ -41,10 +41,17 @@ class HomeController with ChangeNotifier {
     notifyListeners();
   }
 
-  /* Future<void> getArquivos() async {
-    arquivos = viewmodel.getArquivos();
-    notifyListeners();
-  } */
+  Future<void> setInitialDate(int value) async {
+    _filter = _filter.copyWith(initialDate: value);
+
+    await loadArquivos();
+  }
+
+  Future<void> setFinalDate(int value) async {
+    _filter = _filter.copyWith(finalDate: value);
+
+    await loadArquivos();
+  }
 
   Future<void> reloadArquivos(String value) async {
     filterArgs = value;
@@ -71,7 +78,7 @@ class HomeController with ChangeNotifier {
     if (res != null) {
       _arquivos = res;
     } else {
-      _arquivos = viewmodel.getArquivos();
+      // _arquivos = viewmodel.getArquivos();
     }
     notifyListeners();
   }

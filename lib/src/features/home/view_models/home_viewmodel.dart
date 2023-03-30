@@ -6,6 +6,8 @@ import 'package:dio/dio.dart';
 class HomeViewmodel implements HomeViewmodelInterface {
   // final baseUrl = 'http://localhost:8983/solr/teste-arquivos';
   final baseUrl = 'http://172.30.129.176:3333/';
+  final rows = 50;
+  final start = 3;
 
   @override
   Future<List<ArquivoModel>?> loadArquivos(
@@ -13,11 +15,8 @@ class HomeViewmodel implements HomeViewmodelInterface {
     var query = '';
 
     if (filters.args == '' || filters.args.isEmpty) {
-      // String anoInicio = '2015';
-      // String anoFim = '2019';
-      // &fq=year%3A[$anoInicio%20TO%20$anoFim]
       query =
-          'select?indent=true&q.op=OR&q=*%3A*&rows=100&useParams=&sort=year+desc';
+          'select?indent=true&q.op=OR&q=*%3A*&rows=${rows.toString()}&useParams=&sort=year+desc';
     } else {
       var type = '';
 
@@ -31,7 +30,27 @@ class HomeViewmodel implements HomeViewmodelInterface {
       String authorQuery =
           authorParts.map((part) => '$type:*$part*').join(' AND ');
       query =
-          'select?indent=true&q.op=AND&q=$authorQuery&rows=100&useParams=&sort=year+desc';
+          'select?indent=true&q.op=AND&q=$authorQuery&rows=${rows.toString()}&useParams=&sort=year+desc';
+    }
+
+    if (filters.initialDate != null && filters.initialDate != null) {
+      int anoInicio = filters.initialDate!;
+      int anoFim = filters.finalDate!;
+
+      if (anoFim > anoInicio) {
+        query +=
+            '&fq=year%3A[${anoInicio.toString()}%20TO%20${anoFim.toString()}]';
+      }
+    } else {
+      if (filters.initialDate != null) {
+        int anoInicio = filters.initialDate!;
+        query += '&fq=year%3A[${anoInicio.toString()}%20TO%20*]';
+      } else {
+        if (filters.finalDate != null) {
+          int anoFim = filters.finalDate!;
+          query += '&fq=year%3A[*%20TO%20${anoFim.toString()}]';
+        }
+      }
     }
 
     final dio = Dio();
@@ -59,7 +78,7 @@ class HomeViewmodel implements HomeViewmodelInterface {
   @override
   Future<List<ArquivoModel>?> fetchArquivos() async {
     var query =
-        'select?indent=true&q.op=OR&q=*%3A*&rows=100&useParams=&sort=year+desc';
+        'select?indent=true&q.op=OR&q=*%3A*&rows=${rows.toString()}&useParams=&sort=year+desc';
 
     final dio = Dio();
 
