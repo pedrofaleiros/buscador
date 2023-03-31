@@ -6,55 +6,37 @@ import 'package:flutter/material.dart';
 
 class HomeController with ChangeNotifier {
   HomeViewmodelInterface viewmodel = HomeViewmodel();
-
   bool _isLoading = false;
-  bool get isLoading => _isLoading;
-
-  List<ArquivoModel> _arquivos = [];
-  List<ArquivoModel> get arquivos => _arquivos;
-  set arquivos(List<ArquivoModel> data) {
-    _arquivos = data;
-    notifyListeners();
-  }
-
   FilterModel _filter = FilterModel(
     type: FilterType.author,
     args: '',
     initialDate: 0,
-    finalDate: 2023,
+    finalDate: 2024,
+    rows: 50,
+    start: 0,
   );
+  List<ArquivoModel> _arquivos = [];
 
+  bool get isLoading => _isLoading;
+  List<ArquivoModel> get arquivos => _arquivos;
   FilterType get filterType => _filter.type;
 
   Future<void> setFilterType(FilterType value) async {
     _filter = _filter.copyWith(type: value);
-    await reloadArquivos(_filter.args);
-    notifyListeners();
+    // await reloadArquivos(_filter.args);
+    if (_filter.args.isEmpty || _filter.args == '') {
+      notifyListeners();
+      return;
+    }
+    await loadArquivos();
   }
 
-  set filterArgs(String value) {
+  Future<void> setFilterArgs(String value) async {
     if (value == '' || value.isEmpty) {
       _filter = _filter.copyWith(args: '');
     } else {
       _filter = _filter.copyWith(args: value);
     }
-    notifyListeners();
-  }
-
-  Future<void> setInitialDate(int value) async {
-    _filter = _filter.copyWith(initialDate: value);
-
-    await loadArquivos();
-  }
-
-  Future<void> setFinalDate(int value) async {
-    _filter = _filter.copyWith(finalDate: value);
-
-    await loadArquivos();
-  }
-
-  Future<void> reloadArquivos(String value) async {
-    filterArgs = value;
     await loadArquivos();
   }
 

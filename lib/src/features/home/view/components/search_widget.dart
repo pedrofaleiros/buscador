@@ -17,7 +17,7 @@ class SearchWidget extends StatelessWidget {
       child: Column(
         children: const [
           SearchTextField(),
-          DateFilter(),
+          //DateFilter(),
           FilterCheckbox(),
         ],
       ),
@@ -45,10 +45,8 @@ class DateFilter extends StatelessWidget {
               onChanged: (value) async {
                 final intValue = int.tryParse(value) ?? 0;
 
-                if (intValue > 2000 && intValue < 2024) {
-                  await Provider.of<HomeController>(context, listen: false)
-                      .setInitialDate(intValue);
-                }
+                /* await Provider.of<HomeController>(context, listen: false)
+                    .setInitialDate(intValue); */
               },
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
@@ -79,10 +77,8 @@ class DateFilter extends StatelessWidget {
               onChanged: (value) async {
                 final intValue = int.tryParse(value) ?? 0;
 
-                if (intValue > 2000 && intValue < 2024) {
-                  await Provider.of<HomeController>(context, listen: false)
-                      .setFinalDate(intValue);
-                }
+                /* await Provider.of<HomeController>(context, listen: false)
+                    .setFinalDate(intValue); */
               },
               keyboardType: TextInputType.number,
               decoration: InputDecoration(

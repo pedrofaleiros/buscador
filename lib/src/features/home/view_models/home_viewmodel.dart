@@ -6,58 +6,37 @@ import 'package:dio/dio.dart';
 class HomeViewmodel implements HomeViewmodelInterface {
   // final baseUrl = 'http://localhost:8983/solr/teste-arquivos';
   final baseUrl = 'http://172.30.129.176:3333/';
-  final rows = 50;
-  final start = 3;
 
-  @override
-  Future<List<ArquivoModel>?> loadArquivos(
-      {required FilterModel filters}) async {
-    var query = '';
-
-    if (filters.args == '' || filters.args.isEmpty) {
-      query =
-          'select?indent=true&q.op=OR&q=*%3A*&rows=${rows.toString()}&useParams=&sort=year+desc';
-    } else {
-      var type = '';
-
-      if (filters.type == FilterType.author) {
-        type = 'author';
-      } else {
-        type = 'title';
-      }
-
-      List<String> authorParts = filters.args.split(' ');
-      String authorQuery =
-          authorParts.map((part) => '$type:*$part*').join(' AND ');
-      query =
-          'select?indent=true&q.op=AND&q=$authorQuery&rows=${rows.toString()}&useParams=&sort=year+desc';
-    }
-
-    if (filters.initialDate != null && filters.initialDate != null) {
-      int anoInicio = filters.initialDate!;
-      int anoFim = filters.finalDate!;
-
-      if (anoFim > anoInicio) {
-        query +=
-            '&fq=year%3A[${anoInicio.toString()}%20TO%20${anoFim.toString()}]';
-      }
-    } else {
-      if (filters.initialDate != null) {
-        int anoInicio = filters.initialDate!;
-        query += '&fq=year%3A[${anoInicio.toString()}%20TO%20*]';
-      } else {
-        if (filters.finalDate != null) {
-          int anoFim = filters.finalDate!;
-          query += '&fq=year%3A[*%20TO%20${anoFim.toString()}]';
-        }
-      }
-    }
-
+  Dio getDio() {
     final dio = Dio();
 
     dio.options.sendTimeout = const Duration(seconds: 5);
     dio.options.receiveTimeout = const Duration(seconds: 5);
     dio.options.connectTimeout = const Duration(seconds: 5);
+
+    return dio;
+  }
+
+  @override
+  Future<List<ArquivoModel>?> loadArquivos({
+    required FilterModel filters,
+  }) async {
+    var query = '';
+
+    if (filters.args == '' || filters.args.isEmpty) {
+      query =
+          'select?indent=true&q.op=OR&q=*%3A*&rows=${filters.rows.toString()}&useParams=&sort=year+desc';
+    } else {
+      var type = filters.type == FilterType.author ? 'author' : 'title';
+
+      List<String> authorParts = filters.args.split(' ');
+      String authorQuery =
+          authorParts.map((part) => '$type:*$part*').join(' AND ');
+      query =
+          'select?indent=true&q.op=AND&q=$authorQuery&rows=${filters.rows.toString()}&useParams=&sort=year+desc';
+    }
+
+    final dio = getDio();
 
     try {
       final response =
@@ -78,14 +57,9 @@ class HomeViewmodel implements HomeViewmodelInterface {
   @override
   Future<List<ArquivoModel>?> fetchArquivos() async {
     var query =
-        'select?indent=true&q.op=OR&q=*%3A*&rows=${rows.toString()}&useParams=&sort=year+desc';
+        'select?indent=true&q.op=OR&q=*%3A*&rows=50&useParams=&sort=year+desc';
 
-    final dio = Dio();
-
-    dio.options.sendTimeout = const Duration(seconds: 5);
-    dio.options.receiveTimeout = const Duration(seconds: 5);
-    dio.options.connectTimeout = const Duration(seconds: 5);
-
+    final dio = getDio();
     try {
       final response =
           await dio.get(baseUrl, queryParameters: {'solr_query': query});
@@ -209,7 +183,3 @@ class HomeViewmodel implements HomeViewmodelInterface {
     return mockData;
   }
 }
-
-
-//http://127.0.0.1:8983/solr/teste-arquivos/select?indent=true&q.op=OR&q= author%3Apedro    &rows=100&useParams=
-//http://127.0.0.1:8983/solr/teste-arquivos/select?indent=true&q.op=OR&q=  *%3A*    &rows=100&useParams=

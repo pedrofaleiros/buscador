@@ -13,10 +13,10 @@ class SearchTextField extends StatelessWidget {
     return TextField(
       onChanged: (value) async {
         await Provider.of<HomeController>(context, listen: false)
-            .reloadArquivos(value);
+            .setFilterArgs(value);
       },
       decoration: InputDecoration(
-        labelText: 'Input Text',
+        labelText: 'Buscar',
         // helperText: 'Helper',
         helperStyle: TextStyle(
           color: Theme.of(context).colorScheme.primary,
