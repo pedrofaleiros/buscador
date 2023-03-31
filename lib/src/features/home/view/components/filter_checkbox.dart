@@ -9,44 +9,67 @@ class FilterCheckbox extends StatelessWidget {
     super.key,
   });
 
-  Widget get _authorCheckbox => Row(
-        children: [
-          const Text('Autor'),
-          Consumer<HomeController>(
-            builder: (_, controller, __) => Checkbox(
-              value: controller.filterType == FilterType.author,
-              onChanged: (value) async {
-                // controller.filterType = FilterType.author;
-                await controller.setFilterType(FilterType.author);
-              },
-            ),
-          ),
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: const [
+          Expanded(child: Text('Buscar por:')),
+          AuthorCheckbox(),
+          TitleCheckbox(),
         ],
-      );
+      ),
+    );
+  }
+}
 
-  Widget get _titleCheckbox => Row(
-        children: [
-          const Text('Titulo'),
-          Consumer<HomeController>(
-            builder: (_, controller, __) => Checkbox(
-              value: controller.filterType == FilterType.title,
-              onChanged: (value) async {
-                // controller.filterType = FilterType.title;
-                await controller.setFilterType(FilterType.title);
-              },
-            ),
-          ),
-        ],
-      );
+class AuthorCheckbox extends StatelessWidget {
+  const AuthorCheckbox({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Expanded(child: Text('Buscar por:')),
-        _authorCheckbox,
-        _titleCheckbox,
+        const Text('Autor'),
+        Consumer<HomeController>(
+          builder: (_, controller, __) => Checkbox(
+            activeColor: Theme.of(context).colorScheme.primary,
+            value: controller.filterType == FilterType.author,
+            onChanged: (value) async {
+              // controller.filterType = FilterType.author;
+              await controller.setFilterType(FilterType.author);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class TitleCheckbox extends StatelessWidget {
+  const TitleCheckbox({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Text('Titulo'),
+        Consumer<HomeController>(
+          builder: (_, controller, __) => Checkbox(
+            activeColor: Theme.of(context).colorScheme.primary,
+            value: controller.filterType == FilterType.title,
+            onChanged: (value) async {
+              // controller.filterType = FilterType.title;
+              await controller.setFilterType(FilterType.title);
+            },
+          ),
+        ),
       ],
     );
   }

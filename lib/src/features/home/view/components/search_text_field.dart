@@ -33,6 +33,10 @@ class SearchTextField extends StatelessWidget {
             color: Color(0xffdbdbdb),
           ),
         ),
+        suffixIcon: IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.search),
+        ),
       ),
     );
   }

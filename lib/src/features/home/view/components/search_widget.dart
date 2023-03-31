@@ -1,6 +1,4 @@
-import 'package:buscador/src/features/home/controller/home_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'filter_checkbox.dart';
 import 'search_text_field.dart';
@@ -17,8 +15,8 @@ class SearchWidget extends StatelessWidget {
       child: Column(
         children: const [
           SearchTextField(),
-          //DateFilter(),
           FilterCheckbox(),
+          //DateFilter(),
         ],
       ),
     );
@@ -107,3 +105,20 @@ class DateFilter extends StatelessWidget {
     );
   }
 }
+
+/* 
+Text(value.toString()),
+          Slider(
+            max: 10,
+            min: 1,
+            divisions: 10,
+            value: value,
+            onChanged: (value) {
+              var intValue = int.tryParse(value.toStringAsFixed(0)) ?? 1;
+
+              setState(() {
+                this.value = double.tryParse(intValue.toString()) ?? 1;
+              });
+            },
+          ),
+ */

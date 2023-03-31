@@ -11,13 +11,19 @@ class ArquivoWidget extends StatelessWidget {
 
   final ArquivoModel arquivo;
   final int index;
-
+  
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text('$index: ${arquivo.title}'),
-      subtitle: Text(arquivo.author),
-      trailing: Text('Publicação:\n ${arquivo.year}'),
+    return Card(
+      elevation: 3,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListTile(
+          title: Text('$index: ${arquivo.title}'),
+          subtitle: Text(arquivo.author),
+          trailing: Text('Publicação:\n ${arquivo.year}'),
+        ),
+      ),
     );
   }
 }
