@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../controller/home_controller.dart';
-import '../../model/filter_model.dart';
+import '../../../controller/home_controller.dart';
+import '../../../model/filter_model.dart';
 
 class FilterCheckbox extends StatelessWidget {
   const FilterCheckbox({

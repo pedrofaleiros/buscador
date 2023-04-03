@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../controller/home_controller.dart';
+import '../../../controller/home_controller.dart';
 
 class SearchTextField extends StatelessWidget {
   const SearchTextField({

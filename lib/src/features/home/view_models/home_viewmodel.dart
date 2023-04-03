@@ -7,6 +7,11 @@ class HomeViewmodel implements HomeViewmodelInterface {
   // final baseUrl = 'http://localhost:8983/solr/teste-arquivos';
   final baseUrl = 'http://172.30.129.176:3333/';
 
+  int _numFound = 0;
+  
+  @override
+  int get numFound => _numFound;
+
   Dio getDio() {
     final dio = Dio();
 
@@ -25,7 +30,7 @@ class HomeViewmodel implements HomeViewmodelInterface {
 
     if (filters.args == '' || filters.args.isEmpty) {
       query =
-          'select?indent=true&q.op=OR&q=*%3A*&rows=${filters.rows.toString()}&useParams=&sort=year+desc';
+          'select?indent=true&q.op=OR&q=*%3A*&rows=${filters.rows.toString()}&start=${filters.start.toStringAsFixed(0)}&useParams=&sort=year+desc';
     } else {
       var type = filters.type == FilterType.author ? 'author' : 'title';
 
@@ -33,7 +38,7 @@ class HomeViewmodel implements HomeViewmodelInterface {
       String authorQuery =
           authorParts.map((part) => '$type:*$part*').join(' AND ');
       query =
-          'select?indent=true&q.op=AND&q=$authorQuery&rows=${filters.rows.toString()}&useParams=&sort=year+desc';
+          'select?indent=true&q.op=AND&q=$authorQuery&rows=${filters.rows.toString()}&start=${filters.start.toStringAsFixed(0)}&useParams=&sort=year+desc';
     }
 
     final dio = getDio();
@@ -41,6 +46,8 @@ class HomeViewmodel implements HomeViewmodelInterface {
     try {
       final response =
           await dio.get(baseUrl, queryParameters: {'solr_query': query});
+
+      _numFound = response.data['response']['numFound'];
 
       final lista = response.data['response']['docs'] as List<dynamic>;
 
@@ -63,6 +70,8 @@ class HomeViewmodel implements HomeViewmodelInterface {
     try {
       final response =
           await dio.get(baseUrl, queryParameters: {'solr_query': query});
+
+      _numFound = response.data['response']['numFound'];
 
       final lista = response.data['response']['docs'] as List<dynamic>;
 

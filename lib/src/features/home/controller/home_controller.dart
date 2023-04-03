@@ -17,9 +17,47 @@ class HomeController with ChangeNotifier {
   );
   List<ArquivoModel> _arquivos = [];
 
+  int get numFound => viewmodel.numFound;
+
   bool get isLoading => _isLoading;
   List<ArquivoModel> get arquivos => _arquivos;
   FilterType get filterType => _filter.type;
+  int get rows => _filter.rows;
+  int get start => _filter.start;
+
+  Future<void> setPage(int value) async {
+    int start = _filter.start;
+    int rows = _filter.rows;
+
+    if (value > 0) {
+      if (start + rows > numFound) {
+        return;
+      }
+      _filter = _filter.copyWith(start: start + rows);
+    } else {
+      if (start == 0) {
+        return;
+      }
+
+      if (start - rows < 0) {
+        start = 0;
+      }
+
+      _filter = _filter.copyWith(start: start - rows);
+    }
+
+    await loadArquivos();
+  }
+
+  Future<void> setRows(int value) async {
+    if (value == _filter.rows) {
+      return;
+    }
+
+    _filter = _filter.copyWith(rows: value, start: 0);
+
+    await loadArquivos();
+  }
 
   Future<void> setFilterType(FilterType value) async {
     _filter = _filter.copyWith(type: value);
@@ -28,6 +66,8 @@ class HomeController with ChangeNotifier {
       notifyListeners();
       return;
     }
+
+    _filter = _filter.copyWith(start: 0);
     await loadArquivos();
   }
 
@@ -37,6 +77,9 @@ class HomeController with ChangeNotifier {
     } else {
       _filter = _filter.copyWith(args: value);
     }
+
+    _filter = _filter.copyWith(start: 0);
+
     await loadArquivos();
   }
 

@@ -11,7 +11,7 @@ class ArquivoWidget extends StatelessWidget {
 
   final ArquivoModel arquivo;
   final int index;
-  
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -19,8 +19,8 @@ class ArquivoWidget extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListTile(
-          title: Text('$index: ${arquivo.title}'),
-          subtitle: Text(arquivo.author),
+          title: Text('${index + 1}: ${arquivo.title}'),
+          subtitle: Text('${arquivo.id} - ${arquivo.author}'),
           trailing: Text('Publicação:\n ${arquivo.year}'),
         ),
       ),
