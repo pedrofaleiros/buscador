@@ -5,16 +5,11 @@ import 'package:provider/provider.dart';
 
 import '../components/home_widget.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   static const routeName = '/home';
 
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
   Widget get _loadingIndicator =>
       const Center(child: CircularProgressIndicator());
 
