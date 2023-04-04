@@ -24,7 +24,14 @@ class FavoritePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Favorites'),
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.primary,
+        ),
+        backgroundColor: Colors.white,
+        title: Text(
+          'Favorites',
+          style: TextStyle(color: Theme.of(context).colorScheme.primary),
+        ),
         actions: [
           IconButton(
             onPressed: () {

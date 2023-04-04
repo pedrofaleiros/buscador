@@ -2,7 +2,7 @@ import 'package:buscador/src/features/favorites/controller/favorite_controller.d
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../model/arquivo_model.dart';
+import '../../../../common/models/arquivo_model.dart';
 
 class ArquivoWidget extends StatelessWidget {
   const ArquivoWidget({

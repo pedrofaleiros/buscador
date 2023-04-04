@@ -1,4 +1,4 @@
-import 'package:buscador/src/features/home/model/arquivo_model.dart';
+import 'package:buscador/src/common/models/arquivo_model.dart';
 import 'package:buscador/src/features/home/model/filter_model.dart';
 import 'package:buscador/src/features/home/view_models/home_viewmodel.dart';
 import 'package:buscador/src/features/home/view_models/interface/home_viewmodel_interface.dart';
