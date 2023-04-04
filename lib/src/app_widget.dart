@@ -1,3 +1,5 @@
+import 'package:buscador/src/features/favorites/controller/favorite_controller.dart';
+import 'package:buscador/src/features/favorites/view/pages/favorite_page.dart';
 import 'package:buscador/src/features/home/controller/home_controller.dart';
 import 'package:buscador/src/features/home/view/page/home_page.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +31,9 @@ class AppWidget extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => HomeController(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => FavoriteController(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -48,6 +53,7 @@ class AppWidget extends StatelessWidget {
         initialRoute: HomePage.routeName,
         routes: {
           HomePage.routeName: (_) => const HomePage(),
+          FavoritePage.routeName: (_) => const FavoritePage(),
         },
       ),
     );

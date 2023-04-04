@@ -1,3 +1,5 @@
+import 'package:buscador/src/features/favorites/view/pages/favorite_page.dart';
+import 'package:buscador/src/features/home/view/page/home_page.dart';
 import 'package:flutter/material.dart';
 
 class HomeDrawer extends StatelessWidget {
@@ -14,9 +16,20 @@ class HomeDrawer extends StatelessWidget {
             ),
             backgroundColor: Colors.white,
           ),
-          const ListTile(title: Text('Elemento 1'), leading: Icon(Icons.person),),
-          const ListTile(title: Text('Elemento 2'), leading: Icon(Icons.person),),
-          const ListTile(title: Text('Elemento 3'), leading: Icon(Icons.person),),
+          ListTile(
+            title: const Text('Home Page'),
+            leading: const Icon(Icons.home),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, HomePage.routeName);
+            },
+          ),
+          ListTile(
+            title: const Text('Favoritos'),
+            leading: const Icon(Icons.star),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, FavoritePage.routeName);
+            },
+          ),
         ],
       ),
     );

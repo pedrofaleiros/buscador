@@ -42,7 +42,7 @@ class ArquivoModel {
       year: int.tryParse(map['year']) ?? 0,
     );
   }
-  
+
   factory ArquivoModel.fromMapSolr(Map<String, dynamic> map) {
     return ArquivoModel(
       id: map['id'],
@@ -50,5 +50,9 @@ class ArquivoModel {
       author: map['author'][0],
       year: map['year'][0],
     );
+  }
+
+  String toJson() {
+    return '{"id": "$id","title": "$title","author": "$author","year": $year}';
   }
 }
