@@ -25,16 +25,16 @@ class ArquivoWidget extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListTile(
-            title: Text('${arquivo.title}'),
-            subtitle: Text('${arquivo.author}'),
+            title: Text(arquivo.title),
+            subtitle: Text(arquivo.author),
             leading: Text('${arquivo.year}'),
             onTap: () {
-              context.read<FavoriteController>().addArquivo(arquivo);
+              context.read<FavoriteController>().handleTapArquivo(arquivo);
             },
             trailing: Checkbox(
               value: favoriteController.findById(arquivo.id),
               onChanged: (value) {
-                favoriteController.addArquivo(arquivo);
+                favoriteController.handleTapArquivo(arquivo);
               },
             ),
           ),

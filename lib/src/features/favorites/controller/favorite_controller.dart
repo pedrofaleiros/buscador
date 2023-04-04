@@ -7,7 +7,7 @@ class FavoriteController with ChangeNotifier {
 
   List<ArquivoModel> get arquivos => _arquivos;
 
-  String? addArquivo(ArquivoModel arquivo) {
+  String? handleTapArquivo(ArquivoModel arquivo) {
     final hasArquivo = _arquivos.contains(arquivo);
     if (!hasArquivo) {
       _arquivos.add(arquivo);
@@ -33,7 +33,7 @@ class FavoriteController with ChangeNotifier {
   String getJsonArquivos() {
     List<String> lista = _arquivos.map((e) => e.toJson()).toList();
 
-    return '"{"lista":${lista}}"';
+    return '"{"lista":$lista}"';
   }
 
   List<Map<String, dynamic>> getMapArquivos() =>

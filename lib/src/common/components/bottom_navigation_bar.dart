@@ -19,8 +19,14 @@ BottomNavigationBar MyBottomNavigationBar(BuildContext context, int index) {
     selectedItemColor: Theme.of(context).colorScheme.primary,
     onTap: (value) {
       if (value == 1) {
+        if(index == 1){
+          return;
+        }
         Navigator.pushReplacementNamed(context, FavoritePage.routeName);
       } else {
+        if(index == 0){
+          return;
+        }
         Navigator.pushReplacementNamed(context, HomePage.routeName);
       }
     },
