@@ -25,8 +25,8 @@ class ArquivoWidget extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListTile(
-            title: Text('${index + 1}: ${arquivo.title}'),
-            subtitle: Text('${arquivo.id} - ${arquivo.author}'),
+            title: Text('${arquivo.title}'),
+            subtitle: Text('${arquivo.author}'),
             leading: Text('${arquivo.year}'),
             onTap: () {
               context.read<FavoriteController>().addArquivo(arquivo);
